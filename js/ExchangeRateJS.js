@@ -1,3 +1,10 @@
+/*
+ * This procedure calls the fixer API and uses the returned currencies
+ * to populate the two options for currency conversion
+ *
+ * Created by Chinedu Umebolu on 07/08/16.
+ */
+
 //Get the JSON data from the Fixer API
 var xmlhttp = new XMLHttpRequest();
 var url ='http://api.fixer.io/latest?base=USD';
@@ -15,42 +22,41 @@ xmlhttp.open("GET", url, true);
 xmlhttp.send();
 
 function ProcessData(data) {
-    /*the JSON data contains 3 objects - base, date, rates
-    I use the rates variable below to store the rates array*/
+    // JSON data contains 3 objects - base, date, rates
+    // I use the rates variable below to store the rates array
     var rates = data.rates;
-    /*next,I assign the 2 select elements and the exchange rate value
-    to the following variables*/
+    // Assigned the 2 select elements and the exchange rate value to the following variables
     var currCurrency = document.getElementById("currCurrency");
     var newCurrency = document.getElementById("newCurrency");
     var exchangeRateInput = document.getElementById("exchangeRate");
 
-    //option variable to be initialised in the below iteration
+    // Option variable to be initialised in the below iteration
     var option;
 
-    //I then iterate through the rates array
+    // Iterate through the rates array
     for (var key in rates) {
-        //checking to see that the key can be found in the rates array
+        // Checking to see that the key can be found in the rates array
         if (rates.hasOwnProperty(key)) {
-            //create an option element
+            // Create an option element
             option = document.createElement("option");
-            //assign the key name as the options text
+            // Assign the key name as the options text
             option.text = key;
-            //assign the key value as the options value
+            // Assign the key value as the options value
             option.value = rates[key];
-            //then append the options element to the current currency element
+            // Append the options element to the current currency element
             currCurrency.appendChild(option);
-            //for new currency, I initialise the options variable again, repeating the above process
+            // For new currency, I initialise the options variable again, repeating the above process
             option = document.createElement("option");
             option.text = key;
             option.value = rates[key];
-            //then append it to the new currency element
+            // Append it to the new currency element
             newCurrency.appendChild(option);
         }
     }
 
-    /*next, i attach onchange event listeners on both selectors,
-    so when their values change, the exchange rate input value is set
-    to the result of the function CalcExchangeRate()*/
+    // Attach onchange event listeners on both selectors,
+    // so when their values change, the exchange rate input value is set
+    // to the result of the function CalcExchangeRate()
     currCurrency.onchange = function(){
                             exchangeRateInput.value = CalcExchangeRate();
                         };
@@ -59,13 +65,16 @@ function ProcessData(data) {
                         };
 }
 
-/*this function calculates and returns the exchange rate by:
-    dividing the new currency value by the current currency value*/
+/**
+ * Returns new currency value by calculating the exchange rate, then dividing
+ * by new currency value.
+ *
+ * @return      the new currency value
+ */
 function CalcExchangeRate(){
     var nCV = newCurrency.value;
     var oCV = currCurrency.value;
     var exchangeRate = nCV / oCV;
     
-    //return the exchange to 4 decimal places
     return exchangeRate.toFixed(4);
 }
