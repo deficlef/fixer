@@ -1,0 +1,18 @@
+#container{
+        border: 1px solid grey;
+        width: 250px;
+        margin: 0 auto;
+        padding: 10px;
+}
+.curr-section{
+        margin: 0px 0px 10px 0px;
+        display: inline-block;
+        float: right;
+}
+select, input{
+        width: 100px;
+        outline: none;
+}
+#clear-fix{
+        clear: both;
+}
